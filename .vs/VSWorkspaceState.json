@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\backend",
+    "\\backend\\FinDash",
+    "\\backend\\FinDash\\FinDash",
+    "\\backend\\FinDash\\FinDash\\Controllers",
+    "\\backend\\FinDash\\FinDash\\Data",
+    "\\backend\\FinDash\\FinDash\\Models",
+    "\\backend\\FinDash\\FinDash\\Properties"
+  ],
+  "SelectedNode": "\\backend",
+  "PreviewInSolutionExplorer": false
+}
