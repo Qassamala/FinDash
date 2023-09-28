@@ -1,5 +1,7 @@
 ﻿using FinDash.Data;
+using FinDash.DTOs;
 using FinDash.Models;
+using FinDash.Services;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -10,58 +12,45 @@ using System.Text;
 
 namespace FinDash.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly FinDashDbContext _context;
-        private readonly IConfiguration _configuration;
+        private readonly PasswordService _passwordService;
+        private readonly TokenService _tokenService;
 
-        public AuthController(FinDashDbContext context, IConfiguration configuration)
+        public AuthController(FinDashDbContext context, PasswordService passwordService, TokenService tokenService)
         {
             _context = context;
-            _configuration = configuration;
+            _passwordService = passwordService;
+            _tokenService = tokenService;
         }
 
         [HttpPost("token")]
-        public IActionResult GetToken([FromBody] User loginInfo)
+        public IActionResult GetToken([FromBody] UserDTO userDto)  // Assume UserDTO contains just Username and Password
         {
-            var user = _context.Users.FirstOrDefault(u => u.Username == loginInfo.Username);
+            var user = _context.Users.FirstOrDefault(u => u.Username == userDto.Username);
 
             if (user == null)
             {
                 return Unauthorized();
             }
 
-            // Hash the incoming password with the stored salt
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: loginInfo.PasswordHash,
-                salt: Convert.FromBase64String(user.Salt),
-                prf: KeyDerivationPrf.HMACSHA1,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8));
-
-            if (hashed != user.PasswordHash)
+            // Validate the password using PasswordService
+            if (!_passwordService.VerifyPassword(userDto.Password, user.PasswordHash, user.Salt))
             {
                 return Unauthorized();
             }
 
-            // Generate Token (create claims and sign token)
-            var claims = new Claim[]
+            // Generate the token using TokenService
+            var token = _tokenService.GenerateToken(user.Username, user.Id);
+
+            return Ok(new
             {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-            new Claim("id", user.Id.ToString()),
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("YourSecretKeyHere"));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["JwtSettings:ValidIssuer"],
-                //audience: "yourdomain.com",
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(60),
-                signingCredentials: creds);
-
-            return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+                token,
+                message = "User authenticated successfully"
+            });
         }
     }
 }

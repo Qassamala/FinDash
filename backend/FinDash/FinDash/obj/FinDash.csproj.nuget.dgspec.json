@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\abdig\\Desktop\\Portfolio\\finDash\\backend\\FinDash\\FinDash\\FinDash.csproj": {}
+    "C:\\Users\\abdig\\Desktop\\Portfolio\\FinDash\\backend\\FinDash\\FinDash\\FinDash.csproj": {}
   },
   "projects": {
-    "C:\\Users\\abdig\\Desktop\\Portfolio\\finDash\\backend\\FinDash\\FinDash\\FinDash.csproj": {
+    "C:\\Users\\abdig\\Desktop\\Portfolio\\FinDash\\backend\\FinDash\\FinDash\\FinDash.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\abdig\\Desktop\\Portfolio\\finDash\\backend\\FinDash\\FinDash\\FinDash.csproj",
+        "projectUniqueName": "C:\\Users\\abdig\\Desktop\\Portfolio\\FinDash\\backend\\FinDash\\FinDash\\FinDash.csproj",
         "projectName": "FinDash",
-        "projectPath": "C:\\Users\\abdig\\Desktop\\Portfolio\\finDash\\backend\\FinDash\\FinDash\\FinDash.csproj",
+        "projectPath": "C:\\Users\\abdig\\Desktop\\Portfolio\\FinDash\\backend\\FinDash\\FinDash\\FinDash.csproj",
         "packagesPath": "C:\\Users\\abdig\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\abdig\\Desktop\\Portfolio\\finDash\\backend\\FinDash\\FinDash\\obj\\",
+        "outputPath": "C:\\Users\\abdig\\Desktop\\Portfolio\\FinDash\\backend\\FinDash\\FinDash\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\abdig\\AppData\\Roaming\\NuGet\\NuGet.Config",

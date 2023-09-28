@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
 using FinDash.Data;
+using FinDash.Services;
 
 namespace FinDash
 {
@@ -12,25 +13,24 @@ namespace FinDash
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var config = builder.Configuration;
+            var services = builder.Services;
+
+            // Add secretfile to config
+            config.AddJsonFile("appsettings.Secret.json", optional: true, reloadOnChange: true);
+
+            // Set the connectin string
+            string connectionString = config.GetConnectionString("FinDashDbContext")!;
 
             // Add DbContext
-            builder.Services.AddDbContext<FinDashDbContext>(options =>
-            {
-                options.UseMySql(builder.Configuration.GetConnectionString("FinDashContext"), new MySqlServerVersion(new Version(8, 0, 21)));
-            });
+            services.AddDbContext<FinDashDbContext>(options =>
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-            // Retrieve 
-            string secretKey = builder.Configuration["JwtSettings:SecretKey"];
-            var key = Encoding.ASCII.GetBytes(secretKey);
-
-            // Add services to the container.
-
-            builder.Services.AddControllers();
-
-            
+            // Retrieve the secret key for JWT and encode it
+            var key = Encoding.ASCII.GetBytes(config["JwtSettings:SecretKey"]!);
 
             // Add JWT Authentication
-            builder.Services.AddAuthentication(x =>
+            services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -41,16 +41,28 @@ namespace FinDash
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
+                    ValidIssuer = config["JwtSettings:ValidIssuer"],
+                    //ValidAudience = config["JwtSettings:ValidAudience"],
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
                 };
             });
 
+            // Add services to the container.
+            services.AddControllers();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
+
+            // Adding PasswordService that generates salt and hashes passwords
+            services.AddSingleton<PasswordService>();
+
+            // Adding TokenService that handles token generation
+            services.AddSingleton<TokenService>();
 
             var app = builder.Build();
 
@@ -63,8 +75,8 @@ namespace FinDash
 
             app.UseHttpsRedirection();
 
+            // Authentication should happen first, then authorization
             app.UseAuthentication();
-
             app.UseAuthorization();
 
 

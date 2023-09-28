@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "jQl6282PGH3B49jumcmhbtkTNhuYuQF6fHEqI/CPtYCroxXHJYZmdJinpSpg43GYH2qBYYIXCfqM3Ci585iT7A==",
+  "dgSpecHash": "vv4rH2TnVYfcghHyTkdo4XOotENpciBQZTqRwVIhnbnLosxFKBqyvHaWJ7++8tTlqKuha8g+s29Pyc7Y2HaBsg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\abdig\\Desktop\\Portfolio\\finDash\\backend\\FinDash\\FinDash\\FinDash.csproj",
+  "projectFilePath": "C:\\Users\\abdig\\Desktop\\Portfolio\\FinDash\\backend\\FinDash\\FinDash\\FinDash.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\abdig\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\abdig\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\7.0.11\\microsoft.aspnetcore.authentication.jwtbearer.7.0.11.nupkg.sha512",
