@@ -23,21 +23,21 @@ namespace FinDash.Controllers
         }
 
         [HttpPost("AddUser")]
-        public async Task<IActionResult> AddUser([FromBody] UserDTO userDto)
+        public async Task<IActionResult> AddUser([FromBody] UserDTO userDTO)
         {
-            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == userDto.Username);
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == userDTO.Username);
             if (existingUser != null)
             {
                 return BadRequest("Username already exists.");
             }
 
             var salt = _passwordService.GenerateSalt();
-            var passwordHash = _passwordService.HashPassword(userDto.Password, salt);
+            var passwordHash = _passwordService.HashPassword(userDTO.Password, salt);
 
             // Create new User
             var user = new User
             {
-                Username = userDto.Username,
+                Username = userDTO.Username,
                 PasswordHash = passwordHash,
                 Salt = salt
             };

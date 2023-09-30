@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
 using FinDash.Data;
 using FinDash.Services;
+using FinDash.Config;
 
 namespace FinDash
 {
@@ -26,9 +27,6 @@ namespace FinDash
             services.AddDbContext<FinDashDbContext>(options =>
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-            // Retrieve the secret key for JWT and encode it
-            var key = Encoding.ASCII.GetBytes(config["JwtSettings:SecretKey"]!);
-
             // Add JWT Authentication
             services.AddAuthentication(x =>
             {
@@ -41,10 +39,10 @@ namespace FinDash
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidIssuer = config["JwtSettings:ValidIssuer"],
+                    ValidIssuer = config[ConfigurationKeys.JWTValidIssuer],
                     //ValidAudience = config["JwtSettings:ValidAudience"],
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(config[ConfigurationKeys.JWTSecretKey]!)),  // Retrieve the secret key for JWT and encode it
                     ValidateIssuer = true,
                     ValidateAudience = false,
                     ValidateLifetime = true,

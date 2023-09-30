@@ -16,13 +16,15 @@ namespace FinDash.Services
 
         public string HashPassword(string password, string salt)
         {
-            var saltedPassword = password + salt;
-            using (var sha256 = SHA256.Create())
-            {
-                var saltedPasswordBytes = Encoding.UTF8.GetBytes(saltedPassword);
-                var hashBytes = sha256.ComputeHash(saltedPasswordBytes);
-                return Convert.ToBase64String(hashBytes);
-            }
+            byte[] saltBytes = Convert.FromBase64String(salt);
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password,
+                salt: saltBytes,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
+
+            return hashed;
         }
         public bool VerifyPassword(string storedHash, string storedSalt, string passwordToVerify)
         {

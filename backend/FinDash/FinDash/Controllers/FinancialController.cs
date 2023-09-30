@@ -11,6 +11,7 @@ namespace FinDash.Controllers
         [HttpGet("GetFinancialData")]
         public IActionResult GetFinancialData()
         {
+            Console.WriteLine("was here");
             // ...logic here...
             return Ok(new { Message = "Accessed data successfully!" });
         }

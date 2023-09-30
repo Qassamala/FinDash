@@ -28,9 +28,9 @@ namespace FinDash.Controllers
         }
 
         [HttpPost("token")]
-        public IActionResult GetToken([FromBody] UserDTO userDto)  // Assume UserDTO contains just Username and Password
+        public IActionResult GetToken([FromBody] UserDTO userDTO)  // Assume UserDTO contains just Username and Password
         {
-            var user = _context.Users.FirstOrDefault(u => u.Username == userDto.Username);
+            var user = _context.Users.FirstOrDefault(u => u.Username == userDTO.Username);
 
             if (user == null)
             {
@@ -38,7 +38,7 @@ namespace FinDash.Controllers
             }
 
             // Validate the password using PasswordService
-            if (!_passwordService.VerifyPassword(userDto.Password, user.PasswordHash, user.Salt))
+            if (!_passwordService.VerifyPassword(user.PasswordHash, user.Salt, userDTO.Password))
             {
                 return Unauthorized();
             }
