@@ -9,6 +9,7 @@ namespace FinDash.Controllers
     public class FinancialController : ControllerBase
     {
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetFinancialData(int id)
         {
             // Retrieve the user ID from the token claims
@@ -27,6 +28,8 @@ namespace FinDash.Controllers
             {
                 return NotFound();
             }
+
+            // Still need to apply additional logic to check authorized data
 
             return Ok(new { Message = "Accessed data successfully!" });
         }

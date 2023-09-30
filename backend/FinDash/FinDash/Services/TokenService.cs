@@ -1,4 +1,5 @@
 ﻿using FinDash.Config;
+using FinDash.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -18,12 +19,13 @@ namespace FinDash.Services
             _configuration = configuration;
         }
 
-        public string GenerateToken(string username, int userId)
+        public string GenerateToken(User user)
         {
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
-                new Claim("id", userId.ToString())
+                new Claim(JwtRegisteredClaimNames.Sub, user.Username),
+                new Claim("id", user.Id.ToString()),
+                new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
             };
 
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration[ConfigurationKeys.JWTSecretKey]!));

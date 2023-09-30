@@ -39,7 +39,8 @@ namespace FinDash.Controllers
             {
                 Username = userDTO.Username,
                 PasswordHash = passwordHash,
-                Salt = salt
+                Salt = salt,
+                IsAdmin = false
             };
 
             // Add to database
@@ -55,7 +56,7 @@ namespace FinDash.Controllers
                 return Conflict("Could not create user.");
             }
 
-            string token = _tokenService.GenerateToken(user.Username, user.Id);
+            string token = _tokenService.GenerateToken(user);
 
             return Ok(new
             {

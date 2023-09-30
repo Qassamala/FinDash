@@ -44,7 +44,7 @@ namespace FinDash.Controllers
             }
 
             // Generate the token using TokenService
-            var token = _tokenService.GenerateToken(user.Username, user.Id);
+            var token = _tokenService.GenerateToken(user);
 
             return Ok(new
             {
