@@ -8,11 +8,26 @@ namespace FinDash.Controllers
     [Route("[controller]")]
     public class FinancialController : ControllerBase
     {
-        [HttpGet("GetFinancialData")]
-        public IActionResult GetFinancialData()
+        [HttpGet("{id}")]
+        public IActionResult GetFinancialData(int id)
         {
-            Console.WriteLine("was here");
-            // ...logic here...
+            // Retrieve the user ID from the token claims
+            var userIdClaim = User.Claims.First(c => c.Type == "id");
+
+            if (userIdClaim == null)
+            {
+                // Handle error - claim not found
+                return Unauthorized(new { Message = "Invalid token" });
+            }
+
+            var userIdFromToken = int.Parse(userIdClaim.Value);
+
+            // Check if the ID in the request matches the ID in the token
+            if (id != userIdFromToken)
+            {
+                return NotFound();
+            }
+
             return Ok(new { Message = "Accessed data successfully!" });
         }
     }
