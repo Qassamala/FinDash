@@ -61,6 +61,8 @@ namespace FinDash.Controllers
             return Ok(new
             {
                 token,
+                user.IsAdmin,
+                user.Id,
                 message = "User created successfully"
             });
         }

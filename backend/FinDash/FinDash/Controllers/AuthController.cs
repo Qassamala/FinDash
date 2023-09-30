@@ -46,9 +46,13 @@ namespace FinDash.Controllers
             // Generate the token using TokenService
             var token = _tokenService.GenerateToken(user);
 
+            Console.WriteLine(user.Id);
+
             return Ok(new
             {
                 token,
+                user.IsAdmin,
+                user.Id,
                 message = "User authenticated successfully"
             });
         }

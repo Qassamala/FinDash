@@ -31,7 +31,7 @@ namespace FinDash.Controllers
 
             // Still need to apply additional logic to check authorized data
 
-            return Ok(new { Message = "Accessed data successfully!" });
+            return Ok(new { Message = "Accessed admin data successfully!" });
         }
     }
 

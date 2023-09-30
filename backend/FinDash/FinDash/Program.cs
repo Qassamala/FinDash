@@ -62,6 +62,17 @@ namespace FinDash
             // Adding TokenService that handles token generation
             services.AddSingleton<TokenService>();
 
+            // Enable CORS for local development *** temporary ***
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowMyOrigin",
+                builder => builder.WithOrigins("http://localhost:3000") // React app address
+                                   .AllowAnyMethod()
+                                   .AllowAnyHeader()
+                                   .AllowCredentials());
+            });
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -72,6 +83,10 @@ namespace FinDash
             }
 
             app.UseHttpsRedirection();
+
+            // Enable Cors for local dev
+            app.UseCors("AllowMyOrigin");
+
 
             // Authentication should happen first, then authorization
             app.UseAuthentication();
