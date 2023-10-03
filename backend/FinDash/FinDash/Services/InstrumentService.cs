@@ -55,8 +55,13 @@ public class InstrumentService
             }
 
             // Bulk insert at the end
-            await _context.StaticStockData.AddRangeAsync(uniqueStockDataList);
-            await _context.SaveChangesAsync();
+            if (uniqueStockDataList.Count > 0)
+            {
+
+                await _context.StaticStockData.AddRangeAsync(uniqueStockDataList);
+                await _context.SaveChangesAsync();
+            }
+            else throw new Exception("No new stocks to add");
 
         }
         catch (Exception e)
