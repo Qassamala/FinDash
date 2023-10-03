@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FinDash.Data;
+using FinDash.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinDash.Controllers
 {
@@ -8,6 +11,31 @@ namespace FinDash.Controllers
     [Route("[controller]")]
     public class FinancialController : ControllerBase
     {
+
+        private readonly InstrumentService _instrumentService;
+        public FinancialController(InstrumentService instrumentService)
+        {
+            _instrumentService= instrumentService;
+        }
+
+        [HttpPost("AddStaticStockData")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AddStaticStockData()
+        {
+            try
+            {
+                await _instrumentService.AddStaticStockData();
+                return Ok("Static stock data added successfully.");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details here for debugging
+                return StatusCode(500, new { Message = "An error occurred while adding static stock data.", Error = ex.Message });
+            }
+        }
+
+
+        // Test endpoint so far to test Admin in token and only accessing data related to id found in token
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult GetFinancialData(int id)

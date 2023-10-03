@@ -21,12 +21,25 @@ export default function AdminHomePage() {
     }
   };
 
+  const handleAddStaticStockData = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await axios.post('https://localhost:7222/Financial/AddStaticStockData', {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log('Static stock data added successfully:', response.data);
+    } catch (error) {
+      console.error('An error occurred while adding static stock data:', error);
+    }
+  };
+
   return (
     <div>
       <h1>Admin Home Page</h1>
       <div></div>
       <button onClick={handleLogout}>Log Out</button>
       <button onClick={handleTest}>Test Financial Endpoint</button>
+      <button onClick={handleAddStaticStockData}>Add Static Stock Data</button>
     </div>
   );
 }

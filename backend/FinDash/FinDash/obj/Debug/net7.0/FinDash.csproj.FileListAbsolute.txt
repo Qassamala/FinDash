@@ -51,3 +51,4 @@ C:\Users\abdig\Desktop\Portfolio\finDash\backend\FinDash\FinDash\obj\Debug\net7.
 C:\Users\abdig\Desktop\Portfolio\FinDash\backend\FinDash\FinDash\bin\Debug\net7.0\appsettings.Development.json
 C:\Users\abdig\Desktop\Portfolio\FinDash\backend\FinDash\FinDash\bin\Debug\net7.0\appsettings.json
 C:\Users\abdig\Desktop\Portfolio\FinDash\backend\FinDash\FinDash\bin\Debug\net7.0\appsettings.Secret.json
+C:\Users\abdig\Desktop\Portfolio\FinDash\backend\FinDash\FinDash\bin\Debug\net7.0\symbolsSWE.txt

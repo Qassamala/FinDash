@@ -4,6 +4,7 @@
     {
         public const string JWTValidIssuer = "JWTSettings:ValidIssuer";
         public const string JWTSecretKey = "JWTSettings:SecretKey";
+        public const string StaticStockData = "StaticStockDataPath:Name";
 
     }
 

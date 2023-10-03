@@ -62,6 +62,9 @@ namespace FinDash
             // Adding TokenService that handles token generation
             services.AddSingleton<TokenService>();
 
+            // Add the InstrumentService
+            services.AddScoped<InstrumentService>();
+
             // Enable CORS for local development *** temporary ***
             services.AddCors(options =>
             {

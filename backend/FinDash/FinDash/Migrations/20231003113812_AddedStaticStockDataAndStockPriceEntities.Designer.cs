@@ -3,6 +3,7 @@ using System;
 using FinDash.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinDash.Migrations
 {
     [DbContext(typeof(FinDashDbContext))]
-    partial class FinDashDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231003113812_AddedStaticStockDataAndStockPriceEntities")]
+    partial class AddedStaticStockDataAndStockPriceEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
