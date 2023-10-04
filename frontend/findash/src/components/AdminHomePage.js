@@ -33,6 +33,20 @@ export default function AdminHomePage() {
     }
   };
 
+  const handleUpdateDb = async (value) => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await axios.post(`https://localhost:7222/Financial/RetrieveStockPrices?region=${value}`, 
+      {}, // Empty object since you're not sending any data in the request body
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error('API call failed:', error);
+    }
+  };
+
   return (
     <div>
       <h1>Admin Home Page</h1>
@@ -40,6 +54,8 @@ export default function AdminHomePage() {
       <button onClick={handleLogout}>Log Out</button>
       <button onClick={handleTest}>Test Financial Endpoint</button>
       <button onClick={handleAddStaticStockData}>Add Static Stock Data</button>
+      <button onClick={() => handleUpdateDb('US')}>Update DB for US</button>
+      <button onClick={() => handleUpdateDb('ST')}>Update DB for ST</button>
     </div>
   );
 }

@@ -3,11 +3,14 @@ using FinDash.Data;
 using FinDash.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 public class InstrumentService
 {
@@ -70,5 +73,127 @@ public class InstrumentService
             Console.WriteLine(e);
             throw new Exception("Could not perform action.");
         }
+    }
+
+    internal async Task GetStockPrices(string region)
+    {
+        // TODO retrieve all symbols and make external API call, update db Stockprice entity with result
+
+        var stockData = _context.StaticStockData
+                    .Select(g => g.Symbol)
+                    .Where(r => r.EndsWith(region))
+                    .ToArray();
+
+        int symbolsFound = stockData.Count();
+
+        string[] batch;
+
+        try
+        {
+            for (int i = 0; i < symbolsFound / 99; i++)
+            {
+                batch = CreateBatch(stockData, i, region);
+                string url = ConstructURL(batch, region);   // creates unique URL string
+                var response = await MakeHTTPCallToYahoo(url);
+                var parsed = DeserializeYahooResponse(response);
+                UpdatePricesInDatabase(parsed);
+                Thread.Sleep(300);
+            }
+        }
+        catch (Exception)
+        {
+            throw new Exception("Unable to perform action");
+        }
+
+    }
+
+    // Create batch with max 99 stocks for API call
+    private string[] CreateBatch(string[] stockData, int i, string region)
+    {
+        var batch = stockData
+            .Skip(i * 99)
+           .Take(99)
+           .ToArray();
+
+        return batch;
+    }
+    
+    private JsonElement.ArrayEnumerator DeserializeYahooResponse(string body)
+    {
+        var jsonDocument = JsonDocument.Parse(body);
+        var root = jsonDocument.RootElement;
+        var quoteResponse = root.GetProperty("quoteResponse");
+        return quoteResponse.GetProperty("result").EnumerateArray();
+    }
+
+    private void UpdatePricesInDatabase(JsonElement.ArrayEnumerator parsed)
+    {
+
+        foreach (var item in parsed)
+        {
+            StaticStockData stock = _context.StaticStockData.SingleOrDefault(s => s.Symbol == item.GetProperty("symbol").GetString())!;
+
+            if (stock != null && item.TryGetProperty("regularMarketPrice", out var priceElement))
+            {
+                StockPrice stockPrice = new StockPrice
+                {
+                    Timestamp = DateTime.Now,
+                    Price = priceElement.GetDecimal(),
+                    StaticStockDataId = stock.Id
+                };
+
+                _context.StockPrices.Add(stockPrice);
+            }
+        }
+        _context.SaveChanges();
+
+        /*
+        foreach (var item in parsed)
+        {
+            StaticStockData stock = _context.StaticStockData.SingleOrDefault(s => s.Symbol == item.GetProperty("symbol").GetString())!;
+
+            StockPrice stockPrice = new StockPrice { Timestamp = DateTime.Now, Price = item.GetProperty("regularMarketPrice").GetDecimal(), StaticStockDataId = stock.Id };
+
+            _context.StockPrices.Add(stockPrice);
+        }
+        _context.SaveChanges();
+        */
+    }
+
+
+    public async Task<string> MakeHTTPCallToYahoo(string url)
+    {
+        var client = new HttpClient();
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri(url),
+            Headers =
+            {
+                { "X-RapidAPI-Key", _configuration[ConfigurationKeys.YahooAPIKey] },
+                { "X-RapidAPI-Host",  _configuration[ConfigurationKeys.YahooAPIHost] },
+            },
+        };
+
+        using (var response = await client.SendAsync(request))
+        {
+            response.EnsureSuccessStatusCode();
+            var body = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(body);
+            return body;
+        }
+    }
+
+    // Construct URL with max 99 stocks
+    private static string ConstructURL(string[] result, string region)
+    {
+        string url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/v2/get-quotes?region="+region+"&symbols=";
+
+        foreach (var item in result)
+        {
+            url = url + item + ",";
+        }
+
+        return url;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FinDash.Data;
+using FinDash.Helpers;
 using FinDash.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,31 @@ namespace FinDash.Controllers
                 // Log the exception details here for debugging
                 return StatusCode(500, new { Message = "An error occurred while adding static stock data.", Error = ex.Message });
             }
+        }
+
+        [HttpPost("RetrieveStockPrices")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetStockPrices([FromQuery] string region)
+        {
+            if (Enum.IsDefined(typeof(Region), region.ToUpper()))
+            {
+                try
+                {
+                    await _instrumentService.GetStockPrices(region.ToUpper());
+                    return Ok("Stock prices added successfully.");
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception details here for debugging
+                    return StatusCode(500, new { Message = "An error occurred while retrieving and updating stock prices.", Error = ex.Message });
+                }
+            }
+            else
+            {
+                return StatusCode(500, new { Message = "Invalid region provided." });
+            }
+
+            
         }
 
 
