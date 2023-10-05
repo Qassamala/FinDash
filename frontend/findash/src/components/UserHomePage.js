@@ -1,7 +1,10 @@
 import React from 'react';
 import axios from 'axios';
+import StockContainer from '../components/Dashboard/StockContainer';
+import MarketDataContainer from '../components/Dashboard/MarketDataContainer';
 
-export default function HomePage() {
+export default function UserHomePage() {
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('isAdmin');
@@ -25,6 +28,15 @@ export default function HomePage() {
     <div>
       <button onClick={handleLogout}>Log Out</button>
       <button onClick={handleTest}>Test Financial Endpoint</button>
+
+      <h1>User Home Page</h1>
+      <div>
+        <StockContainer />
+        <MarketDataContainer title="Market News" />
+        <MarketDataContainer title="Currency" />
+        <MarketDataContainer title="US 10 Year Bond Yields" />
+        <MarketDataContainer title="Indices" />
+      </div>
     </div>
   );
 }

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.HttpResults;
+using FinDash.ViewModels;
 
 public class InstrumentService
 {
@@ -146,18 +147,6 @@ public class InstrumentService
             }
         }
         _context.SaveChanges();
-
-        /*
-        foreach (var item in parsed)
-        {
-            StaticStockData stock = _context.StaticStockData.SingleOrDefault(s => s.Symbol == item.GetProperty("symbol").GetString())!;
-
-            StockPrice stockPrice = new StockPrice { Timestamp = DateTime.Now, Price = item.GetProperty("regularMarketPrice").GetDecimal(), StaticStockDataId = stock.Id };
-
-            _context.StockPrices.Add(stockPrice);
-        }
-        _context.SaveChanges();
-        */
     }
 
 
@@ -195,5 +184,23 @@ public class InstrumentService
         }
 
         return url;
+    }
+
+    internal List<StockViewModel> LoadStocks()
+    {
+        List<StockViewModel> stockList = new List<StockViewModel>();
+
+        var query = from stockPrice in _context.StockPrices
+                    join staticData in _context.StaticStockData
+                    on stockPrice.StaticStockDataId equals staticData.Id
+                    select new StockViewModel
+                    {
+                        Id = staticData.Id,
+                        Symbol = staticData.Symbol,
+                        LastUpdated = stockPrice.Timestamp,
+                        Price = stockPrice.Price
+                    };
+
+        return query.ToList();
     }
 }

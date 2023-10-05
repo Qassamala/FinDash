@@ -36,7 +36,7 @@ export default function AdminHomePage() {
   const handleUpdateDb = async (value) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.post(`https://localhost:7222/Financial/RetrieveStockPrices?region=${value}`, 
+      const response = await axios.post(`https://localhost:7222/Financial/UpdateStockPrices?region=${value}`, 
       {}, // Empty object since you're not sending any data in the request body
       {
         headers: { Authorization: `Bearer ${token}` },

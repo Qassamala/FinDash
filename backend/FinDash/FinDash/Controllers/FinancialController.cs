@@ -1,6 +1,7 @@
 ﻿using FinDash.Data;
 using FinDash.Helpers;
 using FinDash.Services;
+using FinDash.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,24 @@ namespace FinDash.Controllers
             _instrumentService= instrumentService;
         }
 
+        [HttpGet("LoadStocks")]
+        public IActionResult LoadStocks()
+        {
+            try
+            {
+                // Fetch the stocks from your database or external API
+                List<StockViewModel> stocks =  _instrumentService.LoadStocks();
+
+                return Ok(stocks);
+
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details here for debugging
+                return StatusCode(500, new { Message = "An error occurred while loading stocks data.", Error = ex.Message });
+            }
+        }
+
         [HttpPost("AddStaticStockData")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddStaticStockData()
@@ -35,7 +54,7 @@ namespace FinDash.Controllers
             }
         }
 
-        [HttpPost("RetrieveStockPrices")]
+        [HttpPost("UpdateStockPrices")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetStockPrices([FromQuery] string region)
         {

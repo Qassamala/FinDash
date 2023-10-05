@@ -26,10 +26,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div>
-      <input placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
-      <input placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
-      <button onClick={handleLogin}>Login</button>
+    <div id='loginDiv'>
+       <div>
+           <div id='appName'>FinDash App</div>
+            <div>
+                <input placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
+            </div>
+            <div>
+                <input placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
+            </div>
+            <button onClick={handleLogin}>Login</button>
+        </div>
+      
     </div>
   );
 }

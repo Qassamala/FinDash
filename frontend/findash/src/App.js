@@ -7,7 +7,8 @@ import {
 } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import AdminHomePage from './components/AdminHomePage';
-import NonAdminHomePage from './components/HomePage';
+import UserHomePage from './components/UserHomePage';
+import './css/App.css';  // Importing the CSS file here
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/admin" element={<AdminHomePage />} />
-        <Route path="/home" element={<NonAdminHomePage />} />
+        <Route path="/home" element={<UserHomePage />} />
         <Route path="*" element={<LoginPage />} />
       </Routes>
       <NavigationHandler />

@@ -5,6 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(to top, lightblue, #6495ED, darkblue);
+  min-height: 100vh; /* Make sure the body covers the full height*/
 }
 
 code {
