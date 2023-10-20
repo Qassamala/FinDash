@@ -208,19 +208,22 @@ public class InstrumentService
     {
         List<StockViewDTO> stockList = new List<StockViewDTO>();
 
-        var stocksForUser = from userStock in _context.UserStocks
-                            where userStock.UserId == id
-                            join stockPrice in _context.StockPrices
-                            on userStock.StaticStockDataId equals stockPrice.StaticStockDataId
-                            group stockPrice by stockPrice.StaticStockDataId into stockPriceGroup
-                            let latestStockPrice = stockPriceGroup.OrderByDescending(sp => sp.Timestamp).FirstOrDefault()
-                            select new StockViewDTO
+        var stocksForUser = _context.UserStocks
+                            .Where(us => us.UserId == id)
+                            .Include(us => us.StaticStockData)
+                            .ThenInclude(ssd => ssd.StockPrices)
+                            .Select(us => new {
+                                Symbol = us.StaticStockData.Symbol,
+                                LatestStockPrice = us.StaticStockData.StockPrices
+                                                .OrderByDescending(sp => sp.Timestamp)
+                                                .FirstOrDefault()
+                            })
+                            .Select(us => new StockViewDTO
                             {
-                                Id = stockPriceGroup.Key, // StaticStockDataId
-                                Symbol = latestStockPrice.StaticStockData.Symbol,
-                                LastUpdated = latestStockPrice.Timestamp,
-                                Price = latestStockPrice.Price
-                            };
+                                Symbol = us.Symbol,
+                                LastUpdated = us.LatestStockPrice.Timestamp,
+                                Price = us.LatestStockPrice.Price
+                            }).ToList();
 
 
         return stocksForUser.ToList();

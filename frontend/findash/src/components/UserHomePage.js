@@ -14,8 +14,9 @@ export default function UserHomePage() {
     // Load saved stocks when the page loads or when reload state changes
     const fetchSavedStocks = async () => {
       const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
       try {
-        const response = await axios.get('https://localhost:7222/Financial/YourSavedStocksEndpoint', {
+        const response = await axios.get(`https://localhost:7222/Financial/SavedStocks/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setStocks(response.data);
@@ -30,6 +31,7 @@ export default function UserHomePage() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('isAdmin');
+    localStorage.removeItem('userId');
     window.location.href = '/';
   };
 

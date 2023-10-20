@@ -14,8 +14,6 @@ export default function LoginPage() {
       const token = response.data.token;
       const isAdmin = response.data.isAdmin;
       const userId = response.data.id;
-      console.log(userId)
-      console.log(userId)
       localStorage.setItem('token', token);
       localStorage.setItem('isAdmin', isAdmin);
       localStorage.setItem('userId', userId); // Store the user ID

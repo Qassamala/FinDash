@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-export default function StockContainer() {
-  const [stocks, setStocks] = useState([]);
+export default function StockContainer({ stocks }) {
+  const [stocks2, setStocks] = useState([]);
   const [searchData, setSearchData] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
