@@ -1,10 +1,11 @@
 ﻿using FinDash.Data;
+using FinDash.DTOs;
 using FinDash.Helpers;
 using FinDash.Services;
-using FinDash.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace FinDash.Controllers
 {
@@ -17,7 +18,73 @@ namespace FinDash.Controllers
         private readonly InstrumentService _instrumentService;
         public FinancialController(InstrumentService instrumentService)
         {
-            _instrumentService= instrumentService;
+            _instrumentService = instrumentService;
+        }
+
+        [HttpPost("SaveStock")]
+        public async Task<IActionResult> SaveStock([FromBody] AddStockDTO addStockDTO)
+        {
+
+            var userIdClaim = User.Claims.First(c => c.Type == "id");
+
+            if (userIdClaim == null)
+            {
+                // Handle error - claim not found
+                return Unauthorized(new { Message = "Invalid token" });
+            }
+
+            var userIdFromToken = int.Parse(userIdClaim.Value);
+
+            // Check if the ID in the request matches the ID in the token
+            if (addStockDTO.UserId != userIdFromToken)
+            {
+                return Unauthorized(new { Message = "Token mismatch, will be reported." });
+            }
+
+            try
+            {
+                await _instrumentService.AddStockToUser(addStockDTO);
+                return Ok("Stock added succesfully.");
+            }
+            catch (Exception e)
+            {
+
+                return StatusCode(500, new { Message = "An error occurred while loading personal stock data.", Error = e.Message });
+            }
+        }
+
+
+        [HttpGet("SavedStocks/{id}")]
+        public IActionResult GetSavedStocks(int id)
+        {
+
+            var userIdClaim = User.Claims.First(c => c.Type == "id");
+
+            if (userIdClaim == null)
+            {
+                // Handle error - claim not found
+                return Unauthorized(new { Message = "Invalid token" });
+            }
+
+            var userIdFromToken = int.Parse(userIdClaim.Value);
+
+            // Check if the ID in the request matches the ID in the token
+            if (id != userIdFromToken)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                List<StockViewDTO> savedStocks = _instrumentService.LoadSavedStocks(id);
+
+                return Ok(savedStocks);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, new { Message = "An error occurred while loading personal stock data.", Error = ex.Message });
+            }
         }
 
         [HttpGet("LoadStocks")]
@@ -26,7 +93,7 @@ namespace FinDash.Controllers
             try
             {
                 // Fetch the stocks from your database or external API
-                List<StockViewModel> stocks =  _instrumentService.LoadStocks();
+                List<StockViewDTO> stocks = _instrumentService.LoadStocks();
 
                 return Ok(stocks);
 
@@ -76,7 +143,7 @@ namespace FinDash.Controllers
                 return StatusCode(500, new { Message = "Invalid region provided." });
             }
 
-            
+
         }
 
 

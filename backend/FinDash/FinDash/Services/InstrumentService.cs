@@ -11,7 +11,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.HttpResults;
-using FinDash.ViewModels;
+using FinDash.DTOs;
 
 public class InstrumentService
 {
@@ -118,7 +118,7 @@ public class InstrumentService
 
         return batch;
     }
-    
+
     private JsonElement.ArrayEnumerator DeserializeYahooResponse(string body)
     {
         var jsonDocument = JsonDocument.Parse(body);
@@ -176,7 +176,7 @@ public class InstrumentService
     // Construct URL with max 99 stocks
     private static string ConstructURL(string[] result, string region)
     {
-        string url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/v2/get-quotes?region="+region+"&symbols=";
+        string url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/v2/get-quotes?region=" + region + "&symbols=";
 
         foreach (var item in result)
         {
@@ -186,14 +186,14 @@ public class InstrumentService
         return url;
     }
 
-    internal List<StockViewModel> LoadStocks()
+    internal List<StockViewDTO> LoadStocks()
     {
-        List<StockViewModel> stockList = new List<StockViewModel>();
+        List<StockViewDTO> stockList = new List<StockViewDTO>();
 
         var query = from stockPrice in _context.StockPrices
                     join staticData in _context.StaticStockData
                     on stockPrice.StaticStockDataId equals staticData.Id
-                    select new StockViewModel
+                    select new StockViewDTO
                     {
                         Id = staticData.Id,
                         Symbol = staticData.Symbol,
@@ -202,5 +202,39 @@ public class InstrumentService
                     };
 
         return query.ToList();
+    }
+
+    internal List<StockViewDTO> LoadSavedStocks(int id)
+    {
+        List<StockViewDTO> stockList = new List<StockViewDTO>();
+
+        var stocksForUser = from userStock in _context.UserStocks
+                            where userStock.UserId == id
+                            join stockPrice in _context.StockPrices
+                            on userStock.StaticStockDataId equals stockPrice.StaticStockDataId
+                            group stockPrice by stockPrice.StaticStockDataId into stockPriceGroup
+                            let latestStockPrice = stockPriceGroup.OrderByDescending(sp => sp.Timestamp).FirstOrDefault()
+                            select new StockViewDTO
+                            {
+                                Id = stockPriceGroup.Key, // StaticStockDataId
+                                Symbol = latestStockPrice.StaticStockData.Symbol,
+                                LastUpdated = latestStockPrice.Timestamp,
+                                Price = latestStockPrice.Price
+                            };
+
+
+        return stocksForUser.ToList();
+    }
+
+    internal async Task AddStockToUser(AddStockDTO addStockDTO)
+    {
+        var userStock = new UserStock
+        {
+            UserId = addStockDTO.UserId,
+            StaticStockDataId = addStockDTO.StockId
+        };
+
+        await _context.UserStocks.AddAsync(userStock);
+        await _context.SaveChangesAsync();
     }
 }

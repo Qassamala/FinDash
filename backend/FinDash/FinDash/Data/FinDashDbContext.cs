@@ -12,6 +12,7 @@ namespace FinDash.Data
         public DbSet<User> Users { get; set; }
         public DbSet<StaticStockData> StaticStockData { get; set; }
         public DbSet<StockPrice> StockPrices { get; set; }
+        public DbSet<UserStock> UserStocks { get; set; }
 
 
 
@@ -35,6 +36,10 @@ namespace FinDash.Data
                 .HasOne(sp => sp.StaticStockData)
                 .WithMany(s => s.StockPrices)
                 .HasForeignKey(sp => sp.StaticStockDataId);
+
+            modelBuilder.Entity<UserStock>()
+                .HasIndex(us => new { us.UserId, us.StaticStockDataId })
+                .IsUnique();
         }
 
     }
