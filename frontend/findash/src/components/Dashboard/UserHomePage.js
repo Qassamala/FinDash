@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import StockContainer from '../components/Dashboard/StockContainer';
-import MarketDataContainer from '../components/Dashboard/MarketDataContainer';
-import SearchBar from './Dashboard/SearchBar';
+import StockContainer from './StockContainer';
+import MarketDataContainer from './MarketDataContainer';
+import SearchBar from './SearchBar';
 
 export default function UserHomePage() {
   const [stocks, setStocks] = useState([]);
@@ -56,7 +56,7 @@ export default function UserHomePage() {
     }
   };
 
-  const handleNewStock = (newStock) => {
+  const handleRefreshEvent = () => {
     // Your logic to add a new stock, then reload to update
     setReload(!reload);
   };
@@ -65,7 +65,7 @@ export default function UserHomePage() {
     <div className="dashboard">
       <div className="top-section">
         {isSearchOpen ? (
-          <SearchBar data={searchData} setStocks={setStocks} existingStocks={stocks.map(stock => stock.symbol)} handleNewStock={handleNewStock} />
+          <SearchBar data={searchData} setStocks={setStocks} existingStocks={stocks.map(stock => stock.symbol)} handleRefreshEvent={handleRefreshEvent} />
         ) : (
           <button onClick={toggleSearch}>+</button>
         )}
@@ -73,11 +73,7 @@ export default function UserHomePage() {
         <button onClick={handleLogout}>Logout</button>
       </div>
       <div className="main-content">
-        <StockContainer stocks={stocks} />
-        <div className="currencies-and-indices">
-          <MarketDataContainer title="Currency" />
-          <MarketDataContainer title="Indices" />
-        </div>
+        <StockContainer stocks={stocks} handleRefreshEvent={handleRefreshEvent} />
         <div className="details-and-news">
           <MarketDataContainer title="Market News" />
           <MarketDataContainer title="US 10 Year Bond Yields" />

@@ -213,6 +213,7 @@ public class InstrumentService
                             .Include(us => us.StaticStockData)
                             .ThenInclude(ssd => ssd.StockPrices)
                             .Select(us => new {
+                                Id = us.Id,
                                 Symbol = us.StaticStockData.Symbol,
                                 LatestStockPrice = us.StaticStockData.StockPrices
                                                 .OrderByDescending(sp => sp.Timestamp)
@@ -220,6 +221,7 @@ public class InstrumentService
                             })
                             .Select(us => new StockViewDTO
                             {
+                                Id = us.Id,
                                 Symbol = us.Symbol,
                                 LastUpdated = us.LatestStockPrice.Timestamp,
                                 Price = us.LatestStockPrice.Price
@@ -238,6 +240,22 @@ public class InstrumentService
         };
 
         await _context.UserStocks.AddAsync(userStock);
+        await _context.SaveChangesAsync();
+    }
+
+    internal async Task RemoveSavedStock(int id)
+    {
+        // Fetch the record to be deleted
+        var userStock = await _context.UserStocks.FindAsync(id);
+
+        // Check if the record exists
+        if (userStock == null)
+        {
+            throw new Exception("Id not found.");
+        }
+
+        // Delete the record
+        _context.UserStocks.Remove(userStock);
         await _context.SaveChangesAsync();
     }
 }

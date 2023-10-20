@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import AdminHomePage from './components/AdminHomePage';
-import UserHomePage from './components/UserHomePage';
+import UserHomePage from './components/Dashboard/UserHomePage';
 import './css/App.css';  // Importing the CSS file here
 
 function App() {

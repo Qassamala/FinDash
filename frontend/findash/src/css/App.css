@@ -19,6 +19,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  min-height: auto;
 }
 
 .stock-container, 

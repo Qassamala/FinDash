@@ -21,6 +21,30 @@ namespace FinDash.Controllers
             _instrumentService = instrumentService;
         }
 
+        [HttpDelete("RemoveStock/{id}")]
+        public async Task<IActionResult> DeleteStock(int id)
+        {
+            //Check authorization need to be DRY, create helper
+            var userIdClaim = User.Claims.First(c => c.Type == "id");
+
+            if (userIdClaim == null)
+            {
+                // Handle error - claim not found
+                return Unauthorized(new { Message = "Invalid token" });
+            }
+
+            try
+            {
+                await _instrumentService.RemoveSavedStock(id);
+                return Ok("Stock removed succesfully.");
+            }
+            catch (Exception e)
+            {
+
+                return StatusCode(500, new { Message = "An error occurred while removing stock.", Error = e.Message });
+            }
+        }
+
         [HttpPost("SaveStock")]
         public async Task<IActionResult> SaveStock([FromBody] AddStockDTO addStockDTO)
         {

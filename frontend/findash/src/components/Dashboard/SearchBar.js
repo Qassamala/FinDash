@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const SearchBar = ({ data, setStocks, existingStocks, handleNewStock }) => {
+const SearchBar = ({ data, setStocks, existingStocks, handleRefreshEvent }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredData = data.filter((item) =>
@@ -26,8 +26,9 @@ const handleAddStock = (stockSymbol) => {
       }, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log(response.data)
       // Handle the response here. Maybe update the list of existing stocks?
-      handleNewStock()
+      handleRefreshEvent()
       //setStocks([...existingStocks, { id: stockId, symbol: stock.symbol }]);
     } catch (error) {
       console.error('API call failed:', error);

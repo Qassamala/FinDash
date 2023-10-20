@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-export default function StockContainer({ stocks }) {
-  const [stocks2, setStocks] = useState([]);
+export default function StockContainer({ stocks, handleRefreshEvent }) {
   const [searchData, setSearchData] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -28,8 +27,17 @@ export default function StockContainer({ stocks }) {
     }
   };
 
-  const removeStock = (stock) => {
-    setStocks(stocks.filter((item) => item !== stock));
+  const removeStock = async (stockId) => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await axios.delete(`https://localhost:7222/Financial/RemoveStock/${stockId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log(response.data)
+      handleRefreshEvent()
+    } catch (error) {
+      console.error('Error removing stock:', error);
+    }
   };
 
   return (
@@ -42,7 +50,7 @@ export default function StockContainer({ stocks }) {
             <div key={index} className="stock-item">
                 <span>{stock.symbol}</span>
                 <span className="stock-price">{stock.price}</span>
-                <button className="remove-button" onClick={() => removeStock(stock)}>-</button>
+                <button className="remove-button" onClick={() => removeStock(stock.id)}>-</button>
        </div>
         ))}
       </div>
