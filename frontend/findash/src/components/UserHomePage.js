@@ -1,9 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import StockContainer from '../components/Dashboard/StockContainer';
 import MarketDataContainer from '../components/Dashboard/MarketDataContainer';
+import SearchBar from './Dashboard/SearchBar';
 
 export default function UserHomePage() {
+  const [stocks, setStocks] = useState([]);
+  const [searchData, setSearchData] = useState([]);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [reload, setReload] = useState(false);
+
+  useEffect(() => {
+    // Load saved stocks when the page loads or when reload state changes
+    const fetchSavedStocks = async () => {
+      const token = localStorage.getItem('token');
+      try {
+        const response = await axios.get('https://localhost:7222/Financial/YourSavedStocksEndpoint', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setStocks(response.data);
+      } catch (error) {
+        console.error('Error fetching saved stocks:', error);
+      }
+    };
+    
+    fetchSavedStocks();
+  }, [reload]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -11,31 +33,53 @@ export default function UserHomePage() {
     window.location.href = '/';
   };
 
-  const handleTest = async () => {
-    const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId'); // Get the user ID from local storage
-    try {
-      const response = await axios.get(`https://localhost:7222/Financial/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.error('API call failed:', error);
+  const loadStocks = async () => {
+    if (searchData.length === 0) {
+      const token = localStorage.getItem('token');
+      try {
+        const response = await axios.get('https://localhost:7222/Financial/LoadStocks', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setSearchData(response.data);
+      } catch (error) {
+        console.error('Error loading stocks:', error);
+      }
     }
   };
 
-  return (
-    <div>
-      <button onClick={handleLogout}>Log Out</button>
-      <button onClick={handleTest}>Test Financial Endpoint</button>
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen);
+    if (!isSearchOpen && searchData.length === 0) {
+      loadStocks();
+    }
+  };
 
-      <h1>User Home Page</h1>
-      <div>
-        <StockContainer />
-        <MarketDataContainer title="Market News" />
-        <MarketDataContainer title="Currency" />
-        <MarketDataContainer title="US 10 Year Bond Yields" />
-        <MarketDataContainer title="Indices" />
+  const handleNewStock = (newStock) => {
+    // Your logic to add a new stock, then reload to update
+    setReload(!reload);
+  };
+
+  return (
+    <div className="dashboard">
+      <div className="top-section">
+        {isSearchOpen ? (
+          <SearchBar data={searchData} setStocks={setStocks} existingStocks={stocks.map(stock => stock.symbol)} handleNewStock={handleNewStock} />
+        ) : (
+          <button onClick={toggleSearch}>+</button>
+        )}
+        <h2>FINDASH</h2>
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+      <div className="main-content">
+        <StockContainer stocks={stocks} />
+        <div className="currencies-and-indices">
+          <MarketDataContainer title="Currency" />
+          <MarketDataContainer title="Indices" />
+        </div>
+        <div className="details-and-news">
+          <MarketDataContainer title="Market News" />
+          <MarketDataContainer title="US 10 Year Bond Yields" />
+        </div>
       </div>
     </div>
   );

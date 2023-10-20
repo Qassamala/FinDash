@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import SearchBar from './SearchBar';
 import axios from 'axios';
 
 export default function StockContainer() {
@@ -35,6 +34,7 @@ export default function StockContainer() {
 
   return (
     <div>
+
       <h2>Your Stocks</h2>
       <div>
         {/* Display your stocks */}
@@ -46,11 +46,7 @@ export default function StockContainer() {
        </div>
         ))}
       </div>
-      {isSearchOpen ? (
-    <SearchBar data={searchData} setStocks={setStocks} existingStocks={stocks.map(stock => stock.symbol)} />
-) : (
-    <button onClick={toggleSearch}>+</button>
-)}
+      
     </div>
   );
 }
