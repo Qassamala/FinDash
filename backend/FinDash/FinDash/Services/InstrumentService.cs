@@ -224,11 +224,19 @@ public class InstrumentService
                                 Id = us.Id,
                                 Symbol = us.Symbol,
                                 LastUpdated = us.LatestStockPrice.Timestamp,
-                                Price = us.LatestStockPrice.Price
+                                Price = us.LatestStockPrice.Price,
+                                Currency = getCurrency(us.Symbol)
                             }).ToList();
 
 
         return stocksForUser.ToList();
+    }
+
+    private static string getCurrency(string symbol)
+    {
+        string[] subs = symbol.Split('.');
+
+        return subs[1].Equals("ST") ? "SEK" : "USD";
     }
 
     internal async Task AddStockToUser(AddStockDTO addStockDTO)

@@ -3,8 +3,6 @@
     enum Region
     {
         US,
-        ST,
-        Autumn,
-        Winter
+        ST
     }
 }

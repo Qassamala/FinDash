@@ -145,14 +145,17 @@
 }
 
 .stock-item {
-  display: flex;
+  display: flexbox;
   justify-content: space-between;
   align-items: center;
-  width: auto;
 }
 
-.stock-item span {
-  margin-right: 10px;
+.stock-item span { 
+  width: 120px;
+  display: inline-block;
+  /* white-space: nowrap;  */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .remove-button {

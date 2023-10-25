@@ -43,13 +43,14 @@ export default function StockContainer({ stocks, handleRefreshEvent }) {
   return (
     <div className="stock-container">
 
-      <h2>Your Stocks</h2>
+      <h2>Followed Stocks</h2>
       <div>
         {/* Display your stocks */}
         {stocks.map((stock, index) => (
             <div key={index} className="stock-item">
                 <span>{stock.symbol}</span>
                 <span className="stock-price">{stock.price}</span>
+                <span className="stock-currency">{stock.currency}</span>
                 <button className="remove-button" onClick={() => removeStock(stock.id)}>-</button>
        </div>
         ))}
