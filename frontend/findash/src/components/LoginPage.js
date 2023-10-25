@@ -24,18 +24,41 @@ export default function LoginPage() {
   };
 
   return (
-    <div id='loginDiv'>
-       <div>
-           <div id='appName'>FinDash App</div>
-            <div>
-                <input placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
-            </div>
-            <div>
-                <input placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
-            </div>
-            <button onClick={handleLogin}>Login</button>
+    <div className="login-container">
+      <div className="login-header">
+        <img src="/path_to_your_logo.png" alt="Logo" className="login-logo" />
+      </div>
+      <div className="login-content">
+        <h1>FinDash App</h1>
+        <div className="input-group">
+          <label>Username</label>
+          <input 
+            type="text" 
+            placeholder="Username" 
+            onChange={(e) => setUsername(e.target.value)} 
+          />
         </div>
-      
+        <div className="input-group">
+          <label>Password</label>
+          <input 
+            type="password" 
+            placeholder="Password" 
+            onChange={(e) => setPassword(e.target.value)} 
+          />
+        </div>
+        <button className="login-button" onClick={handleLogin}>LOG IN</button>
+        {/* If you want to add the 'Remember me' and 'Forgot password?' functionalities later, you can include them here */}
+      </div>
+       <div className="login-footer"> 
+       {/* <div className="support-info">
+          Contact support: <br />
+          Phone: Your phone number <br />
+          E-mail: Your email address
+        </div>*/}
+        <div className="copyright-info">
+          Copyright &copy; 2023. Nacky Software AB. All rights reserved.
+        </div>
+      </div>
     </div>
   );
 }

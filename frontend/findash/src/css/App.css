@@ -2,9 +2,89 @@
   text-align: center;
 }
 
+.login-container {
+  font-family: 'Arial', sans-serif;
+  background-color: #1b2a36;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  width: 100%; /* Ensures the content container takes the full width */
+}
+
+.login-header {
+  margin-bottom: 50px;
+}
+
+.login-logo {
+  width: 100px;
+}
+
+.login-content {
+  width: 300px;
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: #2a3c4f;
+  color: white;
+}
+
+.login-button {
+  background-color: #00a650;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+  width: 70%; /* Or set to a fixed width if preferred */
+  margin-top: 20px auto; /* Add a margin on top for some spacing */
+}
+
+.login-button:hover {
+  background-color: #008c40;
+}
+
+.remember-me, .forgot-password {
+  margin-top: 10px;
+}
+
+.remember-me input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.login-footer {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.support-info, .copyright-info {
+  margin-bottom: 10px;
+}
+
+
 .dashboard {
   max-width: 1200px; /* Adjust based on your requirement */
   margin: 0 auto;
+  color: white;
 }
 
 .top-section {
@@ -13,6 +93,7 @@
   align-items: center;
   padding: 10px 0;
   margin-bottom: 20px;
+  
 }
 
 .main-content {
@@ -80,18 +161,10 @@
   margin-left: 10px;
 }
 
-.login-button {
-  display: flex;
-  justify-content: center;
-  width: 180px;
-  border-radius: 7px;
-  margin-top: 10px;
-
-}
-
 .search-bar-container {
   position: relative;
   max-width: 200px; /* Set a maximum width */
+  color: black;
 }
 
 .search-bar-input {
