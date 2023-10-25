@@ -41,7 +41,7 @@ export default function StockContainer({ stocks, handleRefreshEvent }) {
   };
 
   return (
-    <div>
+    <div className="stock-container">
 
       <h2>Your Stocks</h2>
       <div>

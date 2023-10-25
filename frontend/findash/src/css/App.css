@@ -105,11 +105,13 @@
 
 .stock-container, 
 .market-data-container {
-  background-color: white;
   padding: 20px;
   box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
   overflow-y: auto;
   max-height: 400px; /* Adjust based on your requirement */
+  border-width: 1px;
+  border-style: solid;
+  border-color:#67ad89;
 }
 
 .stock-container {
@@ -146,7 +148,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: max-content;
+  width: auto;
 }
 
 .stock-item span {
