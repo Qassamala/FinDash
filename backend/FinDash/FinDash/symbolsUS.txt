@@ -1,0 +1,100 @@
+﻿MBLY	Mobileye Global Inc.	USD	
+ARGX	argenx SE	USD	
+CSGP	CoStar Group, Inc.	USD	
+GEHC	GE HealthCare Technologies Inc.	USD	
+DASH	DoorDash, Inc.	USD	
+FANG	Diamondback Energy, Inc.	USD	
+GFS	GLOBALFOUNDRIES Inc.	USD	
+MRNA	Moderna, Inc.	USD	
+ACGL	Arch Capital Group Ltd.	USD	
+FAST	Fastenal Company	USD	
+DXCM	DexCom, Inc.	USD	
+CTSH	Cognizant Technology Solutions Corporation	USD	
+XEL	Xcel Energy Inc.	USD	
+IBKR	Interactive Brokers Group, Inc.	USD	
+VRSK	Verisk Analytics, Inc.	USD	
+LI	Li Auto Inc.	USD	
+EA	Electronic Arts Inc.	USD	
+IDXX	IDEXX Laboratories, Inc.	USD	
+BKR	Baker Hughes Company	USD	
+ON	ON Semiconductor Corporation	USD	
+BIIB	Biogen Inc.	USD	
+CEG	Constellation Energy Corporation	USD	
+BIDU	Baidu, Inc.	USD	
+AEP	American Electric Power Company, Inc.	USD	
+KHC	The Kraft Heinz Company	USD	
+EXC	Exelon Corporation	USD	
+JD	JD.com, Inc.	USD	
+ROST	Ross Stores, Inc.	USD	
+MCHP	Microchip Technology Incorporated	USD	
+PAYX	Paychex, Inc.	USD	
+SGEN	Seagen Inc.	USD	
+KDP	Keurig Dr Pepper Inc.	USD	
+ODFL	Old Dominion Freight Line, Inc.	USD	
+CPRT	Copart, Inc.	USD	
+MRVL	Marvell Technology, Inc.	USD	
+CRWD	CrowdStrike Holdings, Inc.	USD	
+ADSK	Autodesk, Inc.	USD	
+PCAR	PACCAR Inc	USD	
+FTNT	Fortinet, Inc.	USD	
+NXPI	NXP Semiconductors N.V.	USD	
+TEAM	Atlassian Corporation	USD	
+LULU	Lululemon Athletica Inc.	USD	
+CTAS	Cintas Corporation	USD	
+ORLY	O'Reilly Automotive, Inc.	USD	
+MNST	Monster Beverage Corporation	USD	
+ROP	Roper Technologies, Inc.	USD	
+ARM	Arm Holdings plc	USD	
+WDAY	Workday, Inc.	USD	
+MAR	Marriott International, Inc.	USD	
+PYPL	PayPal Holdings, Inc.	USD	
+CSX	CSX Corporation	USD	
+MELI	MercadoLibre, Inc.	USD	
+KLAC	KLA Corporation	USD	
+CDNS	Cadence Design Systems, Inc.	USD	
+CHTR	Charter Communications, Inc.	USD	
+EQIX	Equinix, Inc.	USD	
+NTES	NetEase, Inc.	USD	
+SNPS	Synopsys, Inc.	USD	
+CME	CME Group Inc.	USD	
+MU	Micron Technology, Inc.	USD	
+ABNB	Airbnb, Inc.	USD	
+PANW	Palo Alto Networks, Inc.	USD	
+LRCX	Lam Research Corporation	USD	
+ADI	Analog Devices, Inc.	USD	
+REGN	Regeneron Pharmaceuticals, Inc.	USD	
+MDLZ	Mondelez International, Inc.	USD	
+ADP	Automatic Data Processing, Inc.	USD	
+VRTX	Vertex Pharmaceuticals Incorporated	USD	
+ISRG	Intuitive Surgical, Inc.	USD	
+GILD	Gilead Sciences, Inc.	USD	
+BKNG	Booking Holdings Inc.	USD	
+SBUX	Starbucks Corporation	USD	
+AMAT	Applied Materials, Inc.	USD	
+HON	Honeywell International Inc.	USD	
+QCOM	QUALCOMM Incorporated	USD	
+TXN	Texas Instruments Incorporated	USD	
+SNY	Sanofi	USD	
+INTU	Intuit Inc.	USD	
+PDD	PDD Holdings Inc.	USD	
+INTC	Intel Corporation	USD	
+AMGN	Amgen Inc.	USD	
+AMD	Advanced Micro Devices, Inc.	USD	
+TMUS	T-Mobile US, Inc.	USD	
+CMCSA	Comcast Corporation	USD	
+NFLX	Netflix, Inc.	USD	
+AZN	AstraZeneca PLC	USD	
+CSCO	Cisco Systems, Inc.	USD	
+PEP	PepsiCo, Inc.	USD	
+ASML	ASML Holding N.V.	USD	
+ADBE	Adobe Inc.	USD	
+COST	Costco Wholesale Corporation	USD	
+AVGO	Broadcom Inc.	USD	
+TSLA	Tesla, Inc.	USD	
+META	Meta Platforms, Inc.	USD	
+NVDA	NVIDIA Corporation	USD	
+AMZN	Amazon.com, Inc.	USD	
+GOOG	Alphabet Inc.	USD	
+GOOGL	Alphabet Inc.	USD	
+MSFT	Microsoft Corporation	USD	
+AAPL	Apple Inc.	USD	

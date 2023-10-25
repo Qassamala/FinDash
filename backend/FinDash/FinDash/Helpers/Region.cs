@@ -1,6 +1,6 @@
 ﻿namespace FinDash.Helpers
 {
-    enum Region
+    public enum Region
     {
         US,
         ST

@@ -21,10 +21,10 @@ export default function AdminHomePage() {
     }
   };
 
-  const handleAddStaticStockData = async () => {
+  const handleAddStaticStockData = async (value) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.post('https://localhost:7222/Financial/AddStaticStockData', {}, {
+      const response = await axios.post(`https://localhost:7222/Financial/AddStaticStockData?region=${value}`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log('Static stock data added successfully:', response.data);
@@ -53,7 +53,8 @@ export default function AdminHomePage() {
       <div></div>
       <button onClick={handleLogout}>Log Out</button>
       <button onClick={handleTest}>Test Financial Endpoint</button>
-      <button onClick={handleAddStaticStockData}>Add Static Stock Data</button>
+      <button onClick={() => handleAddStaticStockData('ST')}>Add Static Stock Data for SWE</button>
+      <button onClick={() => handleAddStaticStockData('US')}>Add Static Stock Data for US</button>
       <button onClick={() => handleUpdateDb('US')}>Update DB for US</button>
       <button onClick={() => handleUpdateDb('ST')}>Update DB for ST</button>
     </div>

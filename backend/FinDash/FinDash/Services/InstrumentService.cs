@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.HttpResults;
 using FinDash.DTOs;
+using FinDash.Helpers;
 
 public class InstrumentService
 {
@@ -24,12 +25,13 @@ public class InstrumentService
         _configuration = configuration;
     }
 
-    public async Task AddStaticStockData()
+    public async Task AddStaticStockData(string region)
     {
         try
         {
-            // File path is enabled via VS settings to be copied to output directory 
-            string path = _configuration[ConfigurationKeys.StaticStockData]!;
+            // File path is enabled via VS settings to be copied to output directory
+            // So far only supporting ST and US
+            string path = region.Equals("ST") ? _configuration[ConfigurationKeys.StaticStockDataSWE]!: _configuration[ConfigurationKeys.StaticStockDataUS]!;
 
             if (!File.Exists(path))
             {
@@ -80,12 +82,15 @@ public class InstrumentService
     {
         // TODO retrieve all symbols and make external API call, update db Stockprice entity with result
 
+        Console.WriteLine($"GetSTockPrices says region is {region}");
+
         var stockData = _context.StaticStockData
                     .Select(g => g.Symbol)
-                    .Where(r => r.EndsWith(region))
                     .ToArray();
 
         int symbolsFound = stockData.Count();
+
+        Console.WriteLine("Symbols Found: " + symbolsFound);
 
         string[] batch;
 
@@ -129,6 +134,7 @@ public class InstrumentService
 
     private void UpdatePricesInDatabase(JsonElement.ArrayEnumerator parsed)
     {
+        Console.WriteLine(parsed.ElementAt(0));
 
         foreach (var item in parsed)
         {
@@ -143,10 +149,10 @@ public class InstrumentService
                     StaticStockDataId = stock.Id
                 };
 
-                _context.StockPrices.Add(stockPrice);
+                _context.StockPrices.AddAsync(stockPrice);
             }
         }
-        _context.SaveChanges();
+        _context.SaveChangesAsync();
     }
 
 
@@ -234,9 +240,8 @@ public class InstrumentService
 
     private static string getCurrency(string symbol)
     {
-        string[] subs = symbol.Split('.');
 
-        return subs[1].Equals("ST") ? "SEK" : "USD";
+        return symbol.Contains(".ST") ? "SEK" : "USD";
     }
 
     internal async Task AddStockToUser(AddStockDTO addStockDTO)

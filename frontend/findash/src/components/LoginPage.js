@@ -28,8 +28,8 @@ export default function LoginPage() {
       <div className="login-header">
         <img src="./logo333.png" alt="Logo" className="login-logo" />
       </div>
+      <h1>FinDash - a financial dashboard</h1>
       <div className="login-content">
-        <h1>FinDash - a financial dashboard</h1>
         <div className="input-group">
           <label>Username</label>
           <input 

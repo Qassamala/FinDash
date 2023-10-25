@@ -131,17 +131,24 @@ namespace FinDash.Controllers
 
         [HttpPost("AddStaticStockData")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AddStaticStockData()
+        public async Task<IActionResult> AddStaticStockData([FromQuery] string region)
         {
-            try
+            if (Enum.IsDefined(typeof(Region), region.ToUpper()))
             {
-                await _instrumentService.AddStaticStockData();
-                return Ok("Static stock data added successfully.");
+                try
+                {
+                    await _instrumentService.AddStaticStockData(region.ToUpper());
+                    return Ok("Static stock data added successfully.");
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception details here for debugging
+                    return StatusCode(500, new { Message = "An error occurred while adding static stock data.", Error = ex.Message });
+                }
             }
-            catch (Exception ex)
+            else
             {
-                // Log the exception details here for debugging
-                return StatusCode(500, new { Message = "An error occurred while adding static stock data.", Error = ex.Message });
+                return StatusCode(500, new { Message = "Invalid region provided." });
             }
         }
 
