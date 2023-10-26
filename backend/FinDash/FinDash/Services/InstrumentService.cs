@@ -38,6 +38,8 @@ public class InstrumentService
                 throw new FileNotFoundException("Static Stock data file not found.");
             }
 
+            string currency = GetCurrency(region);
+
             // Read the lines from static stock data file
             string[] inputFileStocks = File.ReadAllLines(path);
 
@@ -55,7 +57,7 @@ public class InstrumentService
                 if (!existingSymbols.Contains(symbol))
                 {
                     string companyName = lines[1];  // Also extract the company name
-                    StaticStockData staticStockData = new StaticStockData { Symbol = symbol, CompanyName = companyName };
+                    StaticStockData staticStockData = new StaticStockData { Symbol = symbol, CompanyName = companyName, Currency =  currency};
                     uniqueStockDataList.Add(staticStockData);
                 }
             }
@@ -78,32 +80,37 @@ public class InstrumentService
         }
     }
 
+    // Supports only SEK and USD so far
+    private string GetCurrency(string region)
+    {
+        return region.Equals("ST") ? "SEK" : "USD";
+    }
+
     internal async Task GetStockPrices(string region)
     {
-        // TODO retrieve all symbols and make external API call, update db Stockprice entity with result
-
         Console.WriteLine($"GetSTockPrices says region is {region}");
 
+        // Retrieve all symbols and make external API call, update db Stockprice entity with result
+
         var stockData = _context.StaticStockData
+                    .Where(symbol => symbol.Currency == GetCurrency(region))
                     .Select(g => g.Symbol)
                     .ToArray();
 
-        int symbolsFound = stockData.Count();
-
-        Console.WriteLine("Symbols Found: " + symbolsFound);
-
         string[] batch;
+
+       // Console.WriteLine((stockData.Count() / 100) * 2);
 
         try
         {
-            for (int i = 0; i < symbolsFound / 99; i++)
+            for (int i = 0; i < stockData.Count() / 50; i++)
             {
-                batch = CreateBatch(stockData, i, region);
+                batch = CreateBatch(stockData, i);
                 string url = ConstructURL(batch, region);   // creates unique URL string
                 var response = await MakeHTTPCallToYahoo(url);
                 var parsed = DeserializeYahooResponse(response);
-                UpdatePricesInDatabase(parsed);
-                Thread.Sleep(300);
+                await UpdatePricesInDatabase(parsed);
+                //Thread.Sleep(300);
             }
         }
         catch (Exception)
@@ -113,13 +120,15 @@ public class InstrumentService
 
     }
 
-    // Create batch with max 99 stocks for API call
-    private string[] CreateBatch(string[] stockData, int i, string region)
+    // Create batch with max 50 stocks for API call
+    private string[] CreateBatch(string[] stockData, int i)
     {
         var batch = stockData
-            .Skip(i * 99)
-           .Take(99)
+            .Skip(i * (50))
+           .Take(50)
            .ToArray();
+
+        Console.WriteLine(batch.Count());
 
         return batch;
     }
@@ -132,9 +141,9 @@ public class InstrumentService
         return quoteResponse.GetProperty("result").EnumerateArray();
     }
 
-    private void UpdatePricesInDatabase(JsonElement.ArrayEnumerator parsed)
+    private async Task UpdatePricesInDatabase(JsonElement.ArrayEnumerator parsed)
     {
-        Console.WriteLine(parsed.ElementAt(0));
+        int counter = 0;
 
         foreach (var item in parsed)
         {
@@ -142,17 +151,20 @@ public class InstrumentService
 
             if (stock != null && item.TryGetProperty("regularMarketPrice", out var priceElement))
             {
+                
                 StockPrice stockPrice = new StockPrice
                 {
                     Timestamp = DateTime.Now,
                     Price = priceElement.GetDecimal(),
                     StaticStockDataId = stock.Id
                 };
+                counter++;
 
-                _context.StockPrices.AddAsync(stockPrice);
+                await _context.StockPrices.AddAsync(stockPrice);
             }
         }
-        _context.SaveChangesAsync();
+        Console.WriteLine(counter);
+        await _context.SaveChangesAsync();
     }
 
 
@@ -174,7 +186,6 @@ public class InstrumentService
         {
             response.EnsureSuccessStatusCode();
             var body = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(body);
             return body;
         }
     }
@@ -184,10 +195,14 @@ public class InstrumentService
     {
         string url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/v2/get-quotes?region=" + region + "&symbols=";
 
+        
+
         foreach (var item in result)
         {
             url = url + item + ",";
         }
+
+        Console.WriteLine(url);
 
         return url;
     }
@@ -204,7 +219,9 @@ public class InstrumentService
                         Id = staticData.Id,
                         Symbol = staticData.Symbol,
                         LastUpdated = stockPrice.Timestamp,
-                        Price = stockPrice.Price
+                        Price = stockPrice.Price,
+                        CompanyName = staticData.CompanyName,
+                        Currency = staticData.Currency
                     };
 
         return query.ToList();
@@ -221,6 +238,8 @@ public class InstrumentService
                             .Select(us => new {
                                 Id = us.Id,
                                 Symbol = us.StaticStockData.Symbol,
+                                CompanyName = us.StaticStockData.CompanyName,
+                                Currency = us.StaticStockData.Currency,
                                 LatestStockPrice = us.StaticStockData.StockPrices
                                                 .OrderByDescending(sp => sp.Timestamp)
                                                 .FirstOrDefault()
@@ -231,17 +250,12 @@ public class InstrumentService
                                 Symbol = us.Symbol,
                                 LastUpdated = us.LatestStockPrice.Timestamp,
                                 Price = us.LatestStockPrice.Price,
-                                Currency = getCurrency(us.Symbol)
+                                Currency = us.Currency,
+                                CompanyName = us.CompanyName
                             }).ToList();
 
 
         return stocksForUser.ToList();
-    }
-
-    private static string getCurrency(string symbol)
-    {
-
-        return symbol.Contains(".ST") ? "SEK" : "USD";
     }
 
     internal async Task AddStockToUser(AddStockDTO addStockDTO)
