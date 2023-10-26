@@ -8,17 +8,9 @@ const SearchBar = ({ data, setStocks, existingStocks, handleRefreshEvent }) => {
   item.symbol.toLowerCase().startsWith(searchTerm.toLowerCase())
 );
 
-
-const handleAddStock = (stockSymbol) => {
-    const stockObject = data.find(stock => stock.symbol === stockSymbol);
-    if (stockObject) {
-      setStocks((prevStocks) => [...prevStocks, stockObject]);
-    }
-  };
-
   const saveStock = async (stockId) => {
     const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId'); // Assuming you have saved userId in local storage
+    const userId = localStorage.getItem('userId');
     try {
       const response = await axios.post('https://localhost:7222/Financial/SaveStock', {
         userId,
@@ -27,9 +19,7 @@ const handleAddStock = (stockSymbol) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log(response.data)
-      // Handle the response here. Maybe update the list of existing stocks?
       handleRefreshEvent()
-      //setStocks([...existingStocks, { id: stockId, symbol: stock.symbol }]);
     } catch (error) {
       console.error('API call failed:', error);
   }

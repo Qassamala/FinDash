@@ -3,12 +3,14 @@ import axios from 'axios';
 import StockContainer from './StockContainer';
 import MarketDataContainer from './MarketDataContainer';
 import SearchBar from './SearchBar';
+import DetailedStockView from './DetailedStockView';
 
 export default function UserHomePage() {
   const [stocks, setStocks] = useState([]);
   const [searchData, setSearchData] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [reload, setReload] = useState(false);
+  const [selectedStock, setSelectedStock] = useState({})
 
   useEffect(() => {
     // Load saved stocks when the page loads or when reload state changes
@@ -61,6 +63,11 @@ export default function UserHomePage() {
     setReload(!reload);
   };
 
+  const handleSelectedStock = (stock) => {
+    // Your logic to add a new stock, then reload to update
+    setSelectedStock(stock);
+  };
+
   return (
     <div className="dashboard">
       <div className="top-section">
@@ -73,11 +80,12 @@ export default function UserHomePage() {
         <button onClick={handleLogout}>Logout</button>
       </div>
       <div className="main-content">
-        <StockContainer stocks={stocks} handleRefreshEvent={handleRefreshEvent} />
+        <StockContainer stocks={stocks} handleRefreshEvent={handleRefreshEvent} handleSelectedStock={handleSelectedStock} />
+        </div>
         <div className="details-and-news">
+          <DetailedStockView stock= {selectedStock}/>
           <MarketDataContainer title="Market News" />
           <MarketDataContainer title="US 10 Year Bond Yields" />
-        </div>
       </div>
     </div>
   );
