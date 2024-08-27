@@ -7,7 +7,7 @@
         public decimal Price { get; set; }
         public string CompanyName { get; set; } = null!;
         public string Currency { get; set; } = null!;
-        public DateTime LastUpdated { get; set; }
+        public string LastUpdated { get; set; }
     }
 
 }

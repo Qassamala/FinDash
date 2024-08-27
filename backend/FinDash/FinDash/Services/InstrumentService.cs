@@ -218,7 +218,7 @@ public class InstrumentService
                     {
                         Id = staticData.Id,
                         Symbol = staticData.Symbol,
-                        LastUpdated = stockPrice.Timestamp,
+                        LastUpdated = DateTimeHelper.ConvertTimestamp(stockPrice.Timestamp),
                         Price = stockPrice.Price,
                         CompanyName = staticData.CompanyName,
                         Currency = staticData.Currency
@@ -248,7 +248,7 @@ public class InstrumentService
                             {
                                 Id = us.Id,
                                 Symbol = us.Symbol,
-                                LastUpdated = us.LatestStockPrice.Timestamp,
+                                LastUpdated = DateTimeHelper.ConvertTimestamp(us.LatestStockPrice.Timestamp),    //need to reformat the timestamp from db
                                 Price = us.LatestStockPrice.Price,
                                 Currency = us.Currency,
                                 CompanyName = us.CompanyName

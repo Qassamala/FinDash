@@ -26,6 +26,7 @@ export default function StockContainer({ stocks, handleRefreshEvent, handleSelec
                 <span>{stock.symbol}</span>
                 <span className="stock-price">{stock.price}</span>
                 <span className="stock-currency">{stock.currency}</span>
+                <span className="stock-lastUpdated">{stock.lastUpdated}</span>
                 <button className="select-button" onClick={() => handleSelectedStock(stock)}>Select</button>
                 <button className="remove-button" onClick={() => removeStock(stock.id)}>-</button>
        </div>

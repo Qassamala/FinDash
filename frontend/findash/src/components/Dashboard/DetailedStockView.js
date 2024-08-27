@@ -7,6 +7,7 @@ export default function DetailedStockView({ stock }) {
         <div>
             <div>Symbol: {stock.symbol}</div>
             <div>Company Name: {stock.companyName}</div>
+            <div>Price as of: {stock.lastUpdated}</div>
         </div>}
     </div>
   );
