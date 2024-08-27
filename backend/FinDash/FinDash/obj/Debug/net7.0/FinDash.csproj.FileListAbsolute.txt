@@ -42,7 +42,6 @@ C:\Users\abdig\Desktop\Portfolio\finDash\backend\FinDash\FinDash\obj\Debug\net7.
 C:\Users\abdig\Desktop\Portfolio\finDash\backend\FinDash\FinDash\obj\Debug\net7.0\staticwebassets.build.json
 C:\Users\abdig\Desktop\Portfolio\finDash\backend\FinDash\FinDash\obj\Debug\net7.0\staticwebassets.development.json
 C:\Users\abdig\Desktop\Portfolio\finDash\backend\FinDash\FinDash\obj\Debug\net7.0\scopedcss\bundle\FinDash.styles.css
-C:\Users\abdig\Desktop\Portfolio\finDash\backend\FinDash\FinDash\obj\Debug\net7.0\FinDash.csproj.CopyComplete
 C:\Users\abdig\Desktop\Portfolio\finDash\backend\FinDash\FinDash\obj\Debug\net7.0\FinDash.dll
 C:\Users\abdig\Desktop\Portfolio\finDash\backend\FinDash\FinDash\obj\Debug\net7.0\refint\FinDash.dll
 C:\Users\abdig\Desktop\Portfolio\finDash\backend\FinDash\FinDash\obj\Debug\net7.0\FinDash.pdb
@@ -52,3 +51,5 @@ C:\Users\abdig\Desktop\Portfolio\FinDash\backend\FinDash\FinDash\bin\Debug\net7.
 C:\Users\abdig\Desktop\Portfolio\FinDash\backend\FinDash\FinDash\bin\Debug\net7.0\appsettings.json
 C:\Users\abdig\Desktop\Portfolio\FinDash\backend\FinDash\FinDash\bin\Debug\net7.0\appsettings.Secret.json
 C:\Users\abdig\Desktop\Portfolio\FinDash\backend\FinDash\FinDash\bin\Debug\net7.0\symbolsSWE.txt
+C:\Users\abdig\Desktop\Portfolio\FinDash\backend\FinDash\FinDash\obj\Debug\net7.0\FinDash.sourcelink.json
+C:\Users\abdig\Desktop\Portfolio\FinDash\backend\FinDash\FinDash\obj\Debug\net7.0\FinDash.csproj.Up2Date

@@ -4,6 +4,7 @@ import axios from 'axios';
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
 
   const handleLogin = async () => {
     try {
@@ -20,6 +21,19 @@ export default function LoginPage() {
       window.location.href = isAdmin ? '/admin' : '/home';
     } catch (error) {
       console.error('Login failed:', error);
+    }
+  };
+
+  const handleCreateUser = async () => {
+    try {
+      const response = await axios.post('https://localhost:7222/User/AddUser', {
+        Username: username,
+        Password: password,
+      });
+      setMessage('User created successfully. Please log in.');
+    } catch (error) {
+      console.error('User creation failed:', error);
+      setMessage('User creation failed. Please try again.');
     }
   };
 
@@ -47,6 +61,8 @@ export default function LoginPage() {
           />
         </div>
         <button className="login-button" onClick={handleLogin}>LOG IN</button>
+        <button className="login-button" onClick={handleCreateUser}>Create User</button>
+        <div className="message">{message}</div>
         {/* If you want to add the 'Remember me' and 'Forgot password?' functionalities later, you can include them here */}
       </div>
        <div className="login-footer"> 
